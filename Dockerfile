@@ -3,7 +3,7 @@ FROM lsiobase/ubuntu:focal
 # set version label
 ARG BUILD_DATE
 ARG VERSION
-ARG LAZYLIBRARIAN_COMMIT
+ARG DEBIAN_FRONTEND=noninteractive
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="scambra"
 
@@ -23,6 +23,21 @@ RUN \
 	unrar \
 	calibre-bin \
 	zlib1g && \
+ pip3 install --no-cache-dir -U \
+	apprise \
+	Pillow && \
+ echo "**** cleanup ****" && \
+ apt-get -y purge \
+	libjpeg-turbo8-dev \
+	python3-pip \
+	zlib1g-dev && \
+ apt-get -y autoremove && \
+ rm -rf \
+	/var/lib/apt/lists/* \
+	/var/tmp/*
+
+ARG LAZYLIBRARIAN_COMMIT
+RUN \
  echo "**** install app ****" && \
  mkdir -p \
 	/app/lazylibrarian && \
@@ -36,23 +51,10 @@ RUN \
  /tmp/lazylibrarian.tar.gz -L \
 	"https://gitlab.com/LazyLibrarian/LazyLibrarian/repository/archive.tar.gz?sha={$LAZYLIBRARIAN_COMMIT}" && \
  tar xf \
- /tmp/lazylibrarian.tar.gz -C \
+  /tmp/lazylibrarian.tar.gz -C \
 	/app/lazylibrarian --strip-components=1 && \
- cd /app/lazylibrarian && \
- pip3 install --no-cache-dir -U \
-	apprise \
-	Pillow && \
- echo "**** cleanup ****" && \
- apt-get -y purge \
-	libjpeg-turbo8-dev \
-	python3-pip \
-	zlib1g-dev && \
- apt-get -y autoremove && \
- rm -rf \
-	/tmp/* \
-	/var/lib/apt/lists/* \
-	/var/tmp/*
-    
+ rm -rf /tmp/*
+
 # add local files
 COPY root/ /
 
