@@ -1,4 +1,4 @@
-FROM lsiobase/ubuntu:arm64v8-bionic
+FROM lsiobase/ubuntu:arm64v8-focal
 COPY qemu-aarch64-static /usr/bin/
 
 
