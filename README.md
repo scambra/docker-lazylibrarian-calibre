@@ -76,6 +76,22 @@ docker create \
   scambra/lazylibrarian-calibre
 ```
 
+ARM may need seccomp:unconfined security option:
+
+```
+docker create \
+  --name=lazylibrarian \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Europe/London \
+  -p 5299:5299 \
+  -v <path to data>:/config \
+  -v <path to downloads>:/downloads \
+  -v <path to data>:/books \
+  --restart unless-stopped \
+  --security-opt seccomp=unconfined \
+  scambra/lazylibrarian-calibre
+```
 
 ### docker-compose
 
@@ -98,6 +114,30 @@ services:
       - <path to data>:/books
     ports:
       - 5299:5299
+    restart: unless-stopped
+```
+
+ARM may need seccomp:unconfined security option:
+
+```
+---
+version: "2.1"
+services:
+  lazylibrarian:
+    image: scambra/lazylibrarian-calibre
+    container_name: lazylibrarian
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - <path to data>:/config
+      - <path to downloads>:/downloads
+      - <path to data>:/books
+    ports:
+      - 5299:5299
+    security_opt:
+      - seccomp:unconfined
     restart: unless-stopped
 ```
 
