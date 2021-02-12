@@ -32,8 +32,6 @@ jobs:
         with:
           push: true
           tags: scambra/lazylibrarian-calibre:latest
-          context: .
-          file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v7,linux/arm64
       -
         name: Image digest
