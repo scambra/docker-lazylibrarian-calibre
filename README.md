@@ -68,13 +68,12 @@ docker create \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Europe/London \
-  -e DOCKER_MODS=linuxserver/calibre-web:calibre `#optional` \
   -p 5299:5299 \
   -v <path to data>:/config \
   -v <path to downloads>:/downloads \
   -v <path to data>:/books \
   --restart unless-stopped \
-  linuxserver/lazylibrarian
+  scambra/lazylibrarian-calibre
 ```
 
 
@@ -87,13 +86,12 @@ Compatible with docker-compose v2 schemas.
 version: "2.1"
 services:
   lazylibrarian:
-    image: linuxserver/lazylibrarian
+    image: scambra/lazylibrarian-calibre
     container_name: lazylibrarian
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
-      - DOCKER_MODS=linuxserver/calibre-web:calibre #optional
     volumes:
       - <path to data>:/config
       - <path to downloads>:/downloads
@@ -113,7 +111,6 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Europe/London` | Specify a timezone to use e.g. Europe/London |
-| `-e DOCKER_MODS=linuxserver/calibre-web:calibre` | #optional & **x86-64 only** Adds the ability to enable the Calibredb import program |
 | `-v /config` | LazyLibrarian config |
 | `-v /downloads` | Download location |
 | `-v /books` | Books location |
@@ -149,17 +146,6 @@ In this instance `PUID=1000` and `PGID=1000`, to find yours use `id user` as bel
 
 Access the webui at `http://<your-ip>:5299/home`, for more information check out [Lazylibrarian](https://lazylibrarian.gitlab.io/).
 
-**x86-64 only** We have implemented the optional ability to pull in the dependencies to enable the Calibredb import program:, this means if you don't require this feature the container isn't uneccessarily bloated but should you require it, it is easily available.
-This optional layer will be rebuilt automatically on our CI pipeline upon new Calibre releases so you can stay up to date.
-To use this option add the optional environmental variable as detailed above to pull an addition docker layer to enable ebook conversion and then in the LazyLibrarian config page (Processing:Calibredb import program:) set the path to converter tool to `/usr/bin/calibredb`
-
-
-## Docker Mods
-[![Docker Mods](https://img.shields.io/badge/dynamic/yaml?style=for-the-badge&color=E68523&label=mods&query=%24.mods%5B%27lazylibrarian%27%5D.mod_count&url=https%3A%2F%2Fraw.githubusercontent.com%2Flinuxserver%2Fdocker-mods%2Fmaster%2Fmod-list.yml)](https://mods.linuxserver.io/?mod=lazylibrarian "view available mods for this container.")
-
-We publish various [Docker Mods](https://github.com/linuxserver/docker-mods) to enable additional functionality within the containers. The list of Mods available for this image (if any) can be accessed via the dynamic badge above.
-
-
 ## Support Info
 
 * Shell access whilst the container is running: `docker exec -it lazylibrarian /bin/bash`
@@ -167,7 +153,7 @@ We publish various [Docker Mods](https://github.com/linuxserver/docker-mods) to 
 * container version number
   * `docker inspect -f '{{ index .Config.Labels "build_version" }}' lazylibrarian`
 * image version number
-  * `docker inspect -f '{{ index .Config.Labels "build_version" }}' linuxserver/lazylibrarian`
+  * `docker inspect -f '{{ index .Config.Labels "build_version" }}' scambra/lazylibrarian-calibre`
 
 ## Updating Info
 
@@ -176,7 +162,7 @@ Most of our images are static, versioned, and require an image update and contai
 Below are the instructions for updating containers:
 
 ### Via Docker Run/Create
-* Update the image: `docker pull linuxserver/lazylibrarian`
+* Update the image: `docker pull scambra/lazylibrarian-calibre`
 * Stop the running container: `docker stop lazylibrarian`
 * Delete the container: `docker rm lazylibrarian`
 * Recreate a new container with the same docker create parameters as instructed above (if mapped correctly to a host folder, your `/config` folder and settings will be preserved)
@@ -207,12 +193,12 @@ Below are the instructions for updating containers:
 
 If you want to make local modifications to these images for development purposes or just to customize the logic:
 ```
-git clone https://github.com/linuxserver/docker-lazylibrarian.git
+git clone https://github.com/scambra/docker-lazylibrarian-calibre.git
 cd docker-lazylibrarian
 docker build \
   --no-cache \
   --pull \
-  -t linuxserver/lazylibrarian:latest .
+  -t scambra/lazylibrarian-calibre:latest .
 ```
 
 The ARM variants can be built on x86_64 hardware using `multiarch/qemu-user-static`
