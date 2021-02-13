@@ -13,7 +13,8 @@ RUN \
  apt-get install -y \
 	libjpeg-turbo8-dev \
 	python3-pip \
-	zlib1g-dev && \
+	zlib1g-dev \
+	patch && \
  echo "**** install runtime packages ****" && \
  apt-get install -y \
 	ghostscript \
@@ -25,12 +26,16 @@ RUN \
 	zlib1g && \
  pip3 install --no-cache-dir -U \
 	apprise \
-	Pillow && \
+	Pillow
+COPY cmd_list_categories.patch /tmp/cmd_list_categories.patch
+RUN patch /usr/lib/calibre/calibre/db/cli/cmd_list_categories.py < /tmp/cmd_list_categories.patch
+RUN \
  echo "**** cleanup ****" && \
  apt-get -y purge \
 	libjpeg-turbo8-dev \
 	python3-pip \
-	zlib1g-dev && \
+	zlib1g-dev \
+	patch && \
  apt-get -y autoremove && \
  rm -rf \
 	/var/lib/apt/lists/* \
