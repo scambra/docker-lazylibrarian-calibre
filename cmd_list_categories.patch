@@ -1,0 +1,4 @@
+132c132
+<             x if isinstance(x, bytes) else unicode_type(x).encode('utf-8') for x in row
+---
+>             x if isinstance(x, bytes) else unicode_type(x).encode('utf-8').decode() for x in row
