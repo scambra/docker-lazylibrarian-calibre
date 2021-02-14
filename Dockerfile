@@ -50,7 +50,7 @@ RUN \
  if [ -z ${LAZYLIBRARIAN_COMMIT+x} ]; then \
  	LAZYLIBRARIAN_COMMIT=$(cat /defaults/version.txt); \
  else \
-  echo "${LAZYLIBRARIAN_COMMIT}" > /defaults/version.txt \
+  echo "${LAZYLIBRARIAN_COMMIT}" > /defaults/version.txt; \
  fi && \
  echo "Installing from commit ${LAZYLIBRARIAN_COMMIT}" && \
  curl -o \
