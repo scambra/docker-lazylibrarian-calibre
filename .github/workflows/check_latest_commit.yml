@@ -1,0 +1,25 @@
+name: Get latest commit
+on:
+  schedule:
+    - cron:  '0 21 * * *'
+jobs:
+  get-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
+      - name: Fetch latest commit
+        run: |
+          curl -sL https://gitlab.com/api/v4/projects/9317860/repository/branches/master | \
+          jq -r ".commit.id" > lazylibrarian_commit
+      - name: Check for modified files
+        id: git-check
+        run: echo ::set-output name=modified::$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")
+      - name: Commit latest release version
+        if: steps.git-check.outputs.modified == 'true'
+        run: |
+          git config --global user.name 'Sergio Cambra'
+          git config --global user.email '20515+scambra@users.noreply.github.com'
+          git commit -am "New upstream commit"
+          git push
