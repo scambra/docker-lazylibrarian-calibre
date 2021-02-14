@@ -42,16 +42,17 @@ RUN \
 	/var/tmp/*
 
 ARG LAZYLIBRARIAN_COMMIT
+COPY lazylibrarian_commit /defaults/version.txt
 RUN \
  echo "**** install app ****" && \
  mkdir -p \
 	/app/lazylibrarian && \
  if [ -z ${LAZYLIBRARIAN_COMMIT+x} ]; then \
- 	LAZYLIBRARIAN_COMMIT=$(curl -sX GET "https://gitlab.com/api/v4/projects/9317860/repository/commits/master" \
-    	| awk '/id/{print $4;exit}' FS='[""]'); \
+ 	LAZYLIBRARIAN_COMMIT=$(cat /defaults/version.txt); \
+ else \
+  echo "${LAZYLIBRARIAN_COMMIT}" > /defaults/version.txt \
  fi && \
  echo "Installing from commit ${LAZYLIBRARIAN_COMMIT}" && \
- echo "${LAZYLIBRARIAN_COMMIT}" > /defaults/version.txt && \
  curl -o \
  /tmp/lazylibrarian.tar.gz -L \
 	"https://gitlab.com/LazyLibrarian/LazyLibrarian/repository/archive.tar.gz?sha={$LAZYLIBRARIAN_COMMIT}" && \
