@@ -1,7 +1,7 @@
 name: Get latest commit
 on:
   schedule:
-    - cron:  '0 21 * * *'
+    - cron: '0 21 * * *'
 jobs:
   get-version:
     runs-on: ubuntu-latest
