@@ -55,7 +55,7 @@ RUN \
  echo "Installing from commit ${LAZYLIBRARIAN_COMMIT}" && \
  curl -o \
  /tmp/lazylibrarian.tar.gz -L \
-	"https://gitlab.com/LazyLibrarian/LazyLibrarian/repository/archive.tar.gz?sha={$LAZYLIBRARIAN_COMMIT}" && \
+	"https://gitlab.com/LazyLibrarian/LazyLibrarian/-/archive/{$LAZYLIBRARIAN_COMMIT}/LazyLibrarian-{$LAZYLIBRARIAN_COMMIT}.tar.gz" && \
  tar xf \
   /tmp/lazylibrarian.tar.gz -C \
 	/app/lazylibrarian --strip-components=1 && \
