@@ -22,11 +22,14 @@ RUN \
 	python3-minimal \
 	python3-openssl \
 	unrar \
+	cmake \
 	calibre-bin \
 	zlib1g && \
  pip3 install --no-cache-dir -U \
 	apprise \
-	Pillow
+	Pillow \
+  chardet \
+  python-Levenshtein
 COPY cmd_list_categories.patch /tmp/cmd_list_categories.patch
 RUN patch /usr/lib/calibre/calibre/db/cli/cmd_list_categories.py < /tmp/cmd_list_categories.patch
 RUN \
@@ -35,6 +38,7 @@ RUN \
 	libjpeg-turbo8-dev \
 	python3-pip \
 	zlib1g-dev \
+	cmake \
 	patch && \
  apt-get -y autoremove && \
  rm -rf \
