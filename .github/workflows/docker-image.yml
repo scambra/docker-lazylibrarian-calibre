@@ -40,7 +40,7 @@ jobs:
         with:
           push: true
           tags: scambra/lazylibrarian-calibre:latest
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64
           cache-from: type=registry,ref=scambra/lazylibrarian-calibre:latest
           cache-to: type=inline
       -
